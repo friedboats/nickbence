@@ -27,9 +27,12 @@
   },
   "private": true,
   "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
     "core-js": "^3.6.5",
     "document-register-element": "1.13.1",
     "express": "4.17.1",
+    "mongoose": "^5.11.15",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "tslib": "^2.0.0"
@@ -61,7 +64,7 @@
     "babel-jest": "26.2.2",
     "cypress": "^6.0.1",
     "cz-conventional-changelog": "^3.3.0",
-    "dotenv": "6.2.0",
+    "dotenv": "^6.2.0",
     "eslint": "7.10.0",
     "eslint-config-prettier": "6.0.0",
     "eslint-plugin-cypress": "^2.10.3",

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 
 interface WorkExample {
   title: string;
@@ -7,22 +8,39 @@ interface WorkExample {
 export function App() {
   const [portfolio, setPortfolio] = useState<WorkExample[]>([]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     fetch('/api/portfolio')
     .then((_) => _.json())
     .then(setPortfolio);
-  }, []);
+  }, []); */
 
   function addWorkExample():void {
-    fetch('/api/addWorkExample', {
+    console.log('adding');
+    
+    axios.post('/api/addWorkExample', {
+        title: "Awesome Project #3",
+      }).then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+
+    /*fetch('/api/addWorkExample', {
       method: 'POST',
-      body: '',
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify({
+        "title": "Awesome Project #3",
+      })
     })
     .then((_) => _.json())
     .then((newWorkExample) => {
       setPortfolio([...portfolio,
         newWorkExample]);
-    });
+    });*/
   }
 
   return (

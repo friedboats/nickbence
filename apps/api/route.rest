@@ -1,0 +1,1 @@
+GET mongodb+srv://nickbence:xxXmuS0mUXxQD4Wq@cluster0.in261.mongodb.net/Cluster0?retryWrites=true&w=majority

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const PortfolioItemSchema = mongoose.Schema({
   title: {
     type: String,
@@ -15,4 +16,4 @@ const PortfolioItemSchema = mongoose.Schema({
   },
 });
 
-export default mongoose.model('PortfolioItem', PortfolioItemSchema);
+module.exports = mongoose.model('PortfolioItem', PortfolioItemSchema);

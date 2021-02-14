@@ -1,52 +1,69 @@
 const express = require('express');
+const PortfolioItem = require('../models/PortfolioItem');
 const router = express.Router();
 
-// Get all portfolio items
-router.get('/', (req, res) => {
-  res.send('Get all portfolio items');
+// GET - All portfolio items
+router.get('/', async (req, res) => {
+  try {
+    const portfolio = await PortfolioItem.find();
+    res.json(portfolio);
+  } catch (err) {
+    res.json({ message: err });
+  }
 });
 
-// Get one portfolio item
-router.get('/:id', (req, res) => {
-  res.send('Get one portfolio item');
+// GET - One portfolio item
+router.get('/:id', async (req, res) => {
+  try {
+    const portfolioItem = await PortfolioItem.findById(req.params.id);
+    res.json(portfolioItem);
+  } catch (err) {
+    res.json({ message: err });
+  }
 });
 
-// Create portfolio item
-router.post('/', (req, res) => {
-  res.send('Post one portfolio item');
+// POST - Create portfolio item
+router.post('/', async (req, res) => {
+  try {
+    // Create body from model
+    const portfolioItem = new PortfolioItem({
+      title: req.body.title,
+      description: req.body.description,
+    });
+    await portfolioItem.save();
+    // TODO: Might need to add status code here
+    //res.status(200).json(data);
+    res.json(portfolioItem);
+  } catch (err) {
+    res.json({ message: err });
+  }
 });
 
-// Update portfolio item
-router.patch('/', (req, res) => {
-  res.send('Update one portfolio item');
+// UPDATE - One portfolio item
+router.patch('/:id', async (req, res) => {
+  try {
+    const updatedPortfolioItem = await PortfolioItem.findByIdAndUpdate(
+      req.params.id,
+      { title: req.body.title },
+      { new: true }
+    );
+    res.json(updatedPortfolioItem);
+  } catch (err) {
+    res.json({ message: err });
+  }
 });
 
-// Delete portfolio item
-router.delete('/:id', (req, res) => {
+// DELETE - One portfolio item
+router.delete('/:id', async (req, res) => {
+  try {
+    const removedPortfolioItem = await PortfolioItem.remove({
+      _id: req.params.id,
+    });
+    res.json(removedPortfolioItem);
+  } catch (err) {
+    res.json({ message: err });
+  }
   res.send('Delete one portfolio item');
 });
 
-// POST
-/* router.post('/', (req, res) => {
-  // Create body from model
-  const portfolioItem = new PortfolioItem({
-    title: req.body.title,
-    description: req.body.description,
-  });
-
-  portfolioItem
-    .save()
-    .then((data) => {
-      console.log('hi');
-      // TODO: Might need to add status code here
-      //res.status(200).json(data);
-
-      res.json(data);
-    })
-    .catch((err) => {
-      console.log(err);
-      //res.json({ message: err });
-    });
-});
- */
 export default router;

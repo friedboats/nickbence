@@ -4,11 +4,12 @@ const router = express.Router();
 
 // GET - All portfolio items
 router.get('/', async (req, res) => {
+  //res.json('hi my name is Eleanor.');
   try {
-    const portfolio = await PortfolioItem.find();
-    res.json(portfolio);
+    const portfolio = await PortfolioItem.find().lean();
+    res.status(200).json(portfolio);
   } catch (err) {
-    res.json({ message: err });
+    res.sendStatus(404);
   }
 });
 
@@ -16,9 +17,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const portfolioItem = await PortfolioItem.findById(req.params.id);
-    res.json(portfolioItem);
+    res.status(200).json(portfolioItem);
   } catch (err) {
-    res.json({ message: err });
+    res.sendStatus(404);
   }
 });
 
@@ -31,23 +32,27 @@ router.post('/', async (req, res) => {
       description: req.body.description,
     });
     await portfolioItem.save();
-    // TODO: Might need to add status code here
-    //res.status(200).json(data);
-    res.json(portfolioItem);
+    res.status(201).json(portfolioItem);
   } catch (err) {
     res.json({ message: err });
   }
 });
 
 // UPDATE - One portfolio item
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', async (req, res, next) => {
   try {
-    const updatedPortfolioItem = await PortfolioItem.findByIdAndUpdate(
-      req.params.id,
+    const id = req.params.id;
+    await PortfolioItem.findByIdAndUpdate(
+      id,
       { title: req.body.title },
-      { new: true }
+      (err) => {
+        if (err) {
+          res.json({ message: err });
+        } else {
+          res.sendStatus(204);
+        }
+      }
     );
-    res.json(updatedPortfolioItem);
   } catch (err) {
     res.json({ message: err });
   }
@@ -56,14 +61,13 @@ router.patch('/:id', async (req, res) => {
 // DELETE - One portfolio item
 router.delete('/:id', async (req, res) => {
   try {
-    const removedPortfolioItem = await PortfolioItem.remove({
+    await PortfolioItem.remove({
       _id: req.params.id,
     });
-    res.json(removedPortfolioItem);
+    res.sendStatus(204);
   } catch (err) {
-    res.json({ message: err });
+    res.sendStatus(400);
   }
-  res.send('Delete one portfolio item');
 });
 
 export default router;

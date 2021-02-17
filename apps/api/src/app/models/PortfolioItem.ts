@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const PortfolioItemSchema = mongoose.Schema({
   title: {
     type: String,
